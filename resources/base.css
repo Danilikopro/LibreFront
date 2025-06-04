@@ -52,35 +52,35 @@ h6 {
 
 @font-face {
 	font-family: 'Vanchrome';
-	src: url(/resources/themes/vanchrome.woff) format("woff");
+	src: url(/resources/fonts/vanchrome.woff) format("woff");
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: 'Overpass';
-	src: url(/resources/themes/overpass-regular.woff) format("woff");
+	src: url(/resources/fonts/overpass-regular.woff) format("woff");
 	font-weight: 500;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: 'Overpass';
-	src: url(/resources/themes/overpass-bold.woff) format("woff");
+	src: url(/resources/fonts/overpass-bold.woff) format("woff");
 	font-weight: 700;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: 'Overpass Mono';
-	src: url(/resources/themes/overpass-mono-regular.woff) format("woff");
+	src: url(/resources/fonts/overpass-mono-regular.woff) format("woff");
 	font-weight: 500;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: 'Overpass Mono';
-	src: url(/resources/themes/overpass-mono-bold.woff) format("woff");
+	src: url(/resources/fonts/overpass-mono-bold.woff) format("woff");
 	font-weight: 700;
 	font-style: normal;
 }
