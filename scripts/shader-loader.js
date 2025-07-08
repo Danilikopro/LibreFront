@@ -1,5 +1,4 @@
 const {readFileSync} = require("fs");
-const {LazyWriter} = require("../build/src/util/LazyWriter");
 
 module.exports = async function (shader) {
 	return shader
@@ -28,4 +27,35 @@ function encodeFontData(data) {
 	}
 	writer.writeBits(8, data["common"]["lineHeight"]);
 	return Buffer.from(writer.compress()).toString("base64");
+}
+
+class LazyWriter {
+	length = 0;
+	data = [];
+	offset = 0;
+	buffer;
+
+	actuallyWriteBits(length, value) {
+		for (let i = this.offset; i < this.offset + length; i++) {
+			this.buffer[i >>> 3] |= ((value >>> i - this.offset) & 1) << (~i & 7);
+		}
+		this.offset += length;
+	}
+
+	writeBits(length, value) {
+		if (length > 32) throw new Error("Cannot write more than 32 bits at a time");
+		this.data.push(() => {
+			this.actuallyWriteBits(length, value);
+		});
+		this.length += length;
+	}
+
+	compress() {
+		this.offset = 0;
+		this.buffer = new Uint8Array(Math.ceil(this.length / 8));
+		for (const bit of this.data) {
+			bit();
+		}
+		return this.buffer;
+	}
 }

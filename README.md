@@ -36,7 +36,6 @@ in the project directory:
 ```bash
 git submodule update --init --recursive
 npm ci
-npm run prebuild
 ```
 
 You might need to rerun these commands if you update the repository.
