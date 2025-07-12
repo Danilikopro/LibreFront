@@ -1,6 +1,6 @@
 import {getUserToken} from "../NetworkAuthenticator";
 
-export const apiURL = "https://warfront.io/api";
+export const apiURL = "https://warfront.io/api/v1";
 
 /**
  * Constructs a get endpoint function.

@@ -108,7 +108,7 @@ module.exports = {
 			return middlewares;
 		},
 		proxy: [{
-			context: ["/api"],
+			context: ["/api/v1"],
 			target: process.env.API_SERVER || "https://warfront.io",
 			changeOrigin: true
 		}]

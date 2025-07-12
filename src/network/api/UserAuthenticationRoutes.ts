@@ -8,7 +8,7 @@ import {endpointPOST} from "./Endpoint";
  * @internal Use {@link login} instead
  */
 export function loginUser(service: "discord", state: string) {
-	const url = new URL("/api/login/" + service, window.location.origin);
+	const url = new URL("/api/v1/login/" + service, window.location.origin);
 	url.searchParams.append("redirect", new URL("auth", window.location.origin).toString());
 	url.searchParams.append("state", state);
 	window.location.href = url.toString();
