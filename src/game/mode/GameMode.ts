@@ -1,6 +1,8 @@
 import type {HSLColor} from "../../util/HSLColor";
 import type {GameResult} from "../result/GameResult";
 import {territoryManager} from "../TerritoryManager";
+import type {Player} from "../player/Player";
+import {spawnManager} from "../player/SpawnManager";
 
 /**
  * All game mode-specific logic should be implemented in a subclass of this class.
@@ -33,4 +35,12 @@ export abstract class GameMode {
 	 * @returns The result of the game or null if the game is still in progress
 	 */
 	abstract getResult(): GameResult | null;
+
+	/**
+	 * Returns whether a player should be kept alive,
+	 * @param _player The player to check
+	 */
+	keepAlive(_player: Player) {
+		return spawnManager.isSelecting;
+	}
 }

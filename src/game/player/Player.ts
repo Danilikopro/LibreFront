@@ -1,6 +1,5 @@
 import type {HSLColor} from "../../util/HSLColor";
 import {gameMode} from "../GameData";
-import {spawnManager} from "./SpawnManager";
 
 export class Player {
 	readonly id: number;
@@ -35,7 +34,7 @@ export class Player {
 	removeTile(_tile: number): void {
 		this.territorySize--;
 
-		if (this.territorySize === 0 && !spawnManager.isSelecting) {
+		if (this.territorySize === 0 && !gameMode.keepAlive(this)) {
 			this.alive = false;
 		}
 	}
