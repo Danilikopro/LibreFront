@@ -1,12 +1,8 @@
+import {type BotTrigger, registerBotTrigger} from "../BotPlayer";
 import {random} from "../../Random";
 import {gameTicker} from "../../GameTicker";
 
-export interface BotTrigger {
-	/**
-	 * @returns Whether to trigger a bot action
-	 */
-	trigger(): boolean;
-}
+//@module game
 
 export class RandomBotTrigger implements BotTrigger {
 	private readonly chance: number;
@@ -49,19 +45,16 @@ export class IntervalBotTrigger implements BotTrigger {
 
 //TODO: Implement bot trigger based on game state (e.g. when the bot was recently attacked)
 
-/**
- * Selects some random bot triggers.
- */
-export function selectBotTriggers(): BotTrigger[] {
+registerBotTrigger(t => {
 	const seed = random.nextInt(100);
 	if (seed < 3) {
-		return [new IntervalBotTrigger(5, random.nextInt(5))];
+		t.push(new IntervalBotTrigger(5, random.nextInt(5)));
 	} else if (seed < 10) {
-		return [new RandomBotTrigger(seed)];
+		t.push(new RandomBotTrigger(seed));
 	} else {
-		return [
+		t.push(
 			new RandomBotTrigger(seed % 10),
 			new IntervalBotTrigger(seed + 10, random.nextInt(seed))
-		];
+		);
 	}
-}
+});

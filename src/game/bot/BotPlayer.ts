@@ -1,44 +1,99 @@
 import {Player} from "../player/Player";
 import {HSLColor} from "../../util/HSLColor";
-import {actuallyHandleAttack} from "../attack/AttackActionValidator";
-import {type BotTrigger, selectBotTriggers} from "./modifier/BotTrigger";
-import {type BotConstraints, selectBotConstraints} from "./modifier/BotConstraints";
-import {type BotStrategy, selectBotStrategy} from "./BotStrategy";
+import {PriorityList} from "../../util/PriorityList";
 import {territoryManager} from "../TerritoryManager";
-import {random} from "../Random";
-import {gameMap, gameMode} from "../GameData";
-import {boatManager} from "../boat/BoatManager";
-import {borderManager} from "../BorderManager";
+import {gameMap} from "../GameData";
 
 export class BotPlayer extends Player {
-	protected readonly triggers: BotTrigger[];
-	protected readonly constraints: BotConstraints[];
-	protected readonly strategy: BotStrategy;
+	protected readonly triggers: BotTrigger[] = [];
+	protected readonly constraints: BotConstraints[] = [];
+	protected readonly strategy: BotStrategy[] = [];
+	//TODO: remove
+	waterTiles = 0;
 
 	constructor(id: number) {
 		super(id, "Bot", HSLColor.fromRGB(Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)));
-		this.triggers = selectBotTriggers();
-		this.constraints = selectBotConstraints();
-		this.strategy = selectBotStrategy();
+		triggers.forEach(closure => closure(this.triggers, this));
+		constraints.forEach(closure => closure(this.constraints, this));
+		strategies.forEach(closure => closure(this.strategy, this));
 	}
 
 	tick(): void {
 		if (!this.triggers.some(trigger => trigger.trigger())) return;
 		if (!this.constraints.every(constraint => constraint.allowAttack())) return;
-
-		const target = this.strategy.getTarget(this);
-		if (target !== null) {
-			//TODO: Attack percentage should be configurable
-			actuallyHandleAttack(this, target, 100);
-		} else if (this.waterTiles > 0 && this.strategy.canSpawnBoat()) {
-			const borderTiles = Array.from(borderManager.getBorderTiles(this.id)); //TODO: Check the performance hit this causes
-			const startTile = borderTiles[random.nextInt(borderTiles.length)];
-			const targets = gameMap.boatTargets.get(startTile);
-			if (targets === undefined) return;
-			const target = targets[random.nextInt(targets.length)];
-			if (gameMode.canAttack(this.id, territoryManager.getOwner(target.tile))) {
-				boatManager.addBoatInternal(this, target.path, 100);
-			}
-		}
+		this.strategy.some(strategy => strategy.execute(this));
 	}
+
+	override addTile(tile: number) {
+		super.addTile(tile);
+		gameMap.onNeighbors(tile, neighbor => {
+			if (territoryManager.isWater(neighbor)) {
+				this.waterTiles++;
+			}
+		});
+	}
+
+	override removeTile(tile: number) {
+		super.removeTile(tile);
+		gameMap.onNeighbors(tile, neighbor => {
+			if (territoryManager.isWater(neighbor)) {
+				this.waterTiles--;
+			}
+		});
+	}
+}
+
+const triggers = new PriorityList<(triggers: BotTrigger[], player: BotPlayer) => void>();
+const constraints = new PriorityList<(constraints: BotConstraints[], player: BotPlayer) => void>();
+const strategies = new PriorityList<(strategies: BotStrategy[], player: BotPlayer) => void>();
+
+/**
+ * Register a bot trigger.
+ * Mutate the trigger array to add or remove triggers.
+ * @param closure Called when bot triggers are processed
+ * @param priority The priority to use
+ */
+export function registerBotTrigger(closure: (triggers: BotTrigger[], player: BotPlayer) => void, priority: number = 0): void {
+	triggers.add(closure, priority);
+}
+
+/**
+ * Register a bot constraint.
+ * Mutate the constraint array to add or remove triggers.
+ * @param closure Called when bot constraints are processed
+ * @param priority The priority to use
+ */
+export function registerBotConstraint(closure: (constraints: BotConstraints[], player: BotPlayer) => void, priority: number = 0): void {
+	constraints.add(closure, priority);
+}
+
+/**
+ * Register a bot strategy.
+ * Mutate the strategy array to add or remove strategies.
+ * @param closure Called when bot strategies are processed
+ * @param priority The priority to use
+ */
+export function registerBotStrategy(closure: (strategies: BotStrategy[], player: BotPlayer) => void, priority: number = 0): void {
+	strategies.add(closure, priority);
+}
+
+export interface BotTrigger {
+	/**
+	 * @returns Whether to trigger a bot action
+	 */
+	trigger(): boolean;
+}
+
+export interface BotConstraints {
+	/**
+	 * @returns Whether to allow the bot to attack
+	 */
+	allowAttack(): boolean;
+}
+
+export interface BotStrategy {
+	/**
+	 * @returns Whether the strategy was executed
+	 */
+	execute(player: BotPlayer): boolean;
 }

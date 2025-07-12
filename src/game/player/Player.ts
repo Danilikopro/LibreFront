@@ -1,7 +1,5 @@
 import type {HSLColor} from "../../util/HSLColor";
-import {territoryManager} from "../TerritoryManager";
-import {attackActionHandler} from "../attack/AttackActionHandler";
-import {gameMap, gameMode} from "../GameData";
+import {gameMode} from "../GameData";
 import {spawnManager} from "./SpawnManager";
 
 export class Player {
@@ -11,7 +9,6 @@ export class Player {
 	private troops: number = 1000;
 	private territorySize: number = 0;
 	private alive: boolean = true;
-	protected waterTiles = 0;
 
 	constructor(id: number, name: string, baseColor: HSLColor) {
 		this.id = id;
@@ -22,33 +19,21 @@ export class Player {
 	/**
 	 * Add a tile to the player's territory.
 	 * WARNING: Make sure to call this method AFTER updating the territory manager.
-	 * @param tile The tile to add
+	 * @param _tile The tile to add
 	 * @internal
 	 */
-	addTile(tile: number): void {
+	addTile(_tile: number): void {
 		this.territorySize++;
-		gameMap.onNeighbors(tile, neighbor => {
-			if (territoryManager.isWater(neighbor)) {
-				this.waterTiles++;
-			}
-		});
-
-		attackActionHandler.handleTerritoryAdd(tile, this.id);
 	}
 
 	/**
 	 * Remove a tile from the player's territory.
 	 * WARNING: Make sure to call this method AFTER updating the territory manager.
-	 * @param tile The tile to remove
+	 * @param _tile The tile to remove
 	 * @internal
 	 */
-	removeTile(tile: number): void {
+	removeTile(_tile: number): void {
 		this.territorySize--;
-		gameMap.onNeighbors(tile, neighbor => {
-			if (territoryManager.isWater(neighbor)) {
-				this.waterTiles--;
-			}
-		});
 
 		if (this.territorySize === 0 && !spawnManager.isSelecting) {
 			this.alive = false;

@@ -1,12 +1,8 @@
+import {type BotConstraints, registerBotConstraint} from "../BotPlayer";
 import {gameTicker} from "../../GameTicker";
 import {random} from "../../Random";
 
-export interface BotConstraints {
-	/**
-	 * @returns Whether to allow the bot to attack
-	 */
-	allowAttack(): boolean;
-}
+//@module game
 
 /**
  * This should always be the last bot constraint in the list.
@@ -35,9 +31,4 @@ export class CooldownBotConstraints implements BotConstraints {
 
 //TODO: More constraints (e.g. based on expected density)
 
-/**
- * Selects some random bot constraints.
- */
-export function selectBotConstraints(): BotConstraints[] {
-	return [new CooldownBotConstraints(random.nextInt(20))];
-}
+registerBotConstraint(c => c.push(new CooldownBotConstraints(random.nextInt(20))));

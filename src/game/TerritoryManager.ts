@@ -1,6 +1,7 @@
 import type {TerritoryTransaction} from "./transaction/TerritoryTransaction";
 import {playerManager} from "./player/PlayerManager";
 import {gameMap} from "./GameData";
+import {attackActionHandler} from "./attack/AttackActionHandler";
 
 class TerritoryManager {
 	tileOwners: Uint16Array;
@@ -89,6 +90,7 @@ class TerritoryManager {
 		}
 		playerManager.getPlayer(owner).addTile(tile);
 		transaction.addTile(tile);
+		attackActionHandler.handleTerritoryAdd(tile, owner);
 	}
 
 	/**

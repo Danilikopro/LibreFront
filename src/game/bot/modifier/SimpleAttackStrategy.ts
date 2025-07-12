@@ -1,17 +1,28 @@
-import type {BotPlayer} from "./BotPlayer";
-import {random} from "../Random";
-import {territoryManager} from "../TerritoryManager";
-import {gameMap, gameMode} from "../GameData";
-import {playerManager} from "../player/PlayerManager";
-import {borderManager} from "../BorderManager";
+import {type BotPlayer, type BotStrategy, registerBotStrategy} from "../BotPlayer";
+import {borderManager} from "../../BorderManager";
+import {gameMap, gameMode} from "../../GameData";
+import {territoryManager} from "../../TerritoryManager";
+import {random} from "../../Random";
+import {playerManager} from "../../player/PlayerManager";
+import {actuallyHandleAttack} from "../../attack/AttackActionValidator";
 
-export class BotStrategy {
+//@module game
+
+export class SimpleAttackStrategy implements BotStrategy {
 	constructor(
 		private readonly dropAttackChance: number,
 		private readonly targetSmallChance: number,
 		private readonly targetNonPlayerChance: number,
 		private readonly densityChoiceChance: number,
 	) {}
+
+	execute(player: BotPlayer): boolean {
+		const target = this.getTarget(player);
+		if (target === null) return false;
+		//TODO: Attack percentage should be configurable
+		actuallyHandleAttack(player, target, 100);
+		return true;
+	}
 
 	/**
 	 * @returns The target of this bot strategy, or null if no attack should be performed
@@ -74,15 +85,6 @@ export class BotStrategy {
 
 		return targets[random.nextInt(targets.length)];
 	}
-
-	canSpawnBoat() {
-		return random.nextInt(100) < 30; //TODO: This needs to be integrated better
-	}
 }
 
-/**
- * Selects a bot strategy.
- */
-export function selectBotStrategy(): BotStrategy {
-	return new BotStrategy(5 + random.nextInt(10), random.nextInt(100), random.nextInt(100), random.nextInt(20));
-}
+registerBotStrategy(s => s.push(new SimpleAttackStrategy(5 + random.nextInt(10), random.nextInt(100), random.nextInt(100), random.nextInt(20))));

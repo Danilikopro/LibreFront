@@ -38,6 +38,18 @@ export class PriorityList<T> implements Iterable<T> {
 		return this.elements.find(predicate);
 	}
 
+	forEach(callback: (value: T, index: number, array: T[]) => void): void {
+		this.elements.forEach(callback);
+	}
+
+	some(callback: (value: T, index: number, array: T[]) => unknown): boolean {
+		return this.elements.some(callback);
+	}
+
+	every(callback: (value: T, index: number, array: T[]) => unknown): boolean {
+		return this.elements.every(callback);
+	}
+
 	[Symbol.iterator](): Iterator<T> {
 		return this.elements[Symbol.iterator]();
 	}
