@@ -5,6 +5,7 @@ import {loginUser, refreshToken, revokeToken} from "./api/UserAuthenticationRout
 import {InvalidArgumentException} from "../util/Exceptions";
 import {showUIElement} from "../ui/UIManager";
 import {displayAlert} from "../ui/type/TextNode";
+import {useAuthentication} from "./api/Endpoint";
 
 type UserToken = {
 	/**
@@ -65,6 +66,8 @@ class InvalidUserToken implements UserToken {
 let userToken: UserToken = new ActualUserToken("", 0); // Dummy token to cause a fetch on first use
 
 const refreshTokenCookie = new CookieContext("token");
+
+useAuthentication((options, requested) => requested ? userToken.refresh().then(token => token.addAuth(options)) : Promise.resolve(options))
 
 /**
  * Gets the current user token.

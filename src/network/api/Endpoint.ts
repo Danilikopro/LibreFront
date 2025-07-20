@@ -1,6 +1,8 @@
-import {getUserToken} from "../NetworkAuthenticator";
+let apiURL = "https://warfront.io/api/v1";
 
-export const apiURL = "https://warfront.io/api/v1";
+if (typeof document !== "undefined") {
+	apiURL = new URL("/api/v1", document.location.href).href;
+}
 
 /**
  * Constructs a get endpoint function.
@@ -49,7 +51,7 @@ class APIResponse<T extends { [key: number]: unknown }, E extends keyof T> {
 
 	constructor(url: string, options: Promise<RequestInit>) {
 		options.then(options => {
-			fetch(new URL("/api" + url, document.location.origin), options).then(response => {
+			fetch(apiURL + url, options).then(response => {
 				if (response.headers.get("Content-Type") === "application/json") {
 					response.json().then(data => {
 						this.handleResponse(response.status as keyof T, data as T[keyof T]);
@@ -129,7 +131,7 @@ class APIResponse<T extends { [key: number]: unknown }, E extends keyof T> {
 	 */
 	static get<T extends { [key: number]: unknown }>(url: string, params: Record<string, string>, auth: boolean) {
 		const options = {method: "GET"};
-		return new APIResponse<T, never>(url + "?" + (new URLSearchParams(params)).toString(), auth ? getUserToken().refresh().then(token => token.addAuth(options)) : Promise.resolve(options));
+		return new APIResponse<T, never>(url + (Object.keys(params).length ? "?" + (new URLSearchParams(params)).toString() : ""), authenticate(options, auth));
 	}
 
 	/**
@@ -140,8 +142,21 @@ class APIResponse<T extends { [key: number]: unknown }, E extends keyof T> {
 	 */
 	static post<T extends { [key: number]: unknown }>(url: string, params: Record<string, string>, auth: boolean) {
 		const options = {method: "POST", body: new URLSearchParams(params), headers: {"Content-Type": "application/x-www-form-urlencoded"}};
-		return new APIResponse<T, never>(url, auth ? getUserToken().refresh().then(token => token.addAuth(options)) : Promise.resolve(options));
+		return new APIResponse<T, never>(url, authenticate(options, auth));
 	}
+}
+
+let authenticate: (options: RequestInit, requested: boolean) => Promise<RequestInit> = Promise.resolve.bind(Promise);
+
+/**
+ * Sets the callback to use for authentication.
+ * This is callback is expected to add the appropriate authentication header (if needed).
+ * Requested is true if the endpoint requires authentication, false otherwise.
+ * @param callback Callback to use for authentication
+ * @internal
+ */
+export function useAuthentication(callback: (options: RequestInit, requested: boolean) => Promise<RequestInit>) {
+	authenticate = callback;
 }
 
 type ExtractParams<T extends string> = T extends `${infer _}{${infer P}}${infer R}` ? Record<P, string> & ExtractParams<R> : {};
