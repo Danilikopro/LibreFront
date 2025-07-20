@@ -23,7 +23,7 @@ class BorderManager {
 	 * @param defender The player that lost the tiles.
 	 */
 	transitionTiles(tiles: Set<number>, attacker: number, defender: number): BorderTransitionResult {
-		const attackerBorder = this.borderTiles[attacker];
+		const attackerBorder = this.borderTiles[attacker] || new Set();
 		const defenderBorder = this.borderTiles[defender] || new Set();
 		const result: BorderTransitionResult = {territory: [], attacker: [], defender: []};
 		for (const tile of tiles) {
