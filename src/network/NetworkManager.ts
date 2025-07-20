@@ -82,12 +82,12 @@ export function connectToServer(host: string, abortSignal: AbortSignal | undefin
 			}
 			try {
 				deserializePacket(new Uint8Array(event.data), packetRegistry).handle();
+				resetTimeout();
 			} catch (e) {
 				console.error("Failed to handle packet", e);
 				openSocket.close(SocketErrorCodes.BAD_MESSAGE);
 			}
 		};
-		openSocket.addEventListener("ping", resetTimeout);
 		resetTimeout();
 
 		if (abortSignal) {
