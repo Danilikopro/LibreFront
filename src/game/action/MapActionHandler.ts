@@ -54,8 +54,7 @@ class MapActionHandler implements ClickEventListener {
 		if (territoryManager.getOwner(tile) === territoryManager.OWNER_NONE - 1) return;
 		if (!spawnManager.isValidSpawnPoint(tile)) return;
 		if (!isLocalGame) sendPacket(new SpawnRequestPacket(tile));
-		spawnManager.selectSpawnPoint(clientPlayer.id, tile)
-		spawnManager.finalizeSelection();
+		spawnManager.selectSpawnPoint(clientPlayer.id, tile);
 	}
 
 	/**
