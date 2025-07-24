@@ -35,13 +35,9 @@ class ActualUserToken implements UserToken {
 	}
 
 	addAuth(conf: RequestInit): RequestInit {
-		return {
-			...conf,
-			headers: {
-				...conf.headers,
-				Authorization: `Bearer ${this.token}`
-			}
-		};
+		conf.headers = new Headers(conf.headers);
+		conf.headers.set("Authorization", `Bearer ${this.token}`);
+		return conf;
 	}
 
 	getRawToken(): string {
