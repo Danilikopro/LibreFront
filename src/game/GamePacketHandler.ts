@@ -1,17 +1,16 @@
 import {packetRegistry} from "../network/PacketManager";
 import {GameStartPacket} from "../network/protocol/packet/game/GameStartPacket";
-import {mapFromId} from "../map/MapRegistry";
-import {gameModeFromId} from "./mode/GameModeRegistry";
 import {GameTickPacket} from "../network/protocol/packet/game/GameTickPacket";
 import {gameTicker} from "./GameTicker";
 import {spawnManager} from "./player/SpawnManager";
-import {gameResultRegistry, pauseGame, quitGame, startGame} from "./Game";
+import {gameResultRegistry, pauseGame, quitGame} from "./Game";
 import {gameMode} from "./GameData";
+import {tryStartGame} from "./GameLoader";
 
 //@module game
 
 packetRegistry.handle(GameStartPacket, function () {
-	startGame(mapFromId(this.map), gameModeFromId(this.mode), this.seed, this.players, this.clientId, false);
+	tryStartGame(this.map, this.mode, this.seed, this.players, this.clientId, false);
 });
 
 packetRegistry.handle(GameTickPacket, function () {

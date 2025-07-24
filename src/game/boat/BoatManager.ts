@@ -62,7 +62,7 @@ class BoatManager {
 
 		if ((path as (number | undefined)[]).includes(undefined)) {
 			triggerDebugEvent("Boat pathfinding invalid", `boat-path-undefined-${owner.id}`,
-				{name: "Map Id", type: "number", value: gameMap.id}, {name: "Start position", type: "number", value: start}, {name: "End position", type: "number", value: end});
+				{name: "Map Id", type: "string", value: gameMap.id}, {name: "Start position", type: "number", value: start}, {name: "End position", type: "number", value: end});
 		}
 
 		if (path.length > 0) {

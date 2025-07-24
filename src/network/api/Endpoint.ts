@@ -56,6 +56,10 @@ class APIResponse<T extends { [key: number]: unknown }, E extends keyof T> {
 					response.json().then(data => {
 						this.handleResponse(response.status as keyof T, data as T[keyof T]);
 					}).catch(this.handleError.bind(this));
+				} else if (response.headers.get("Content-Type") === "application/octet-stream") {
+					response.arrayBuffer().then(data => {
+						this.handleResponse(response.status as keyof T, new Uint8Array(data) as T[keyof T]);
+					}).catch(this.handleError.bind(this));
 				} else {
 					//Let's assume (hope) that the response is text
 					response.text().then(data => {
@@ -121,6 +125,16 @@ class APIResponse<T extends { [key: number]: unknown }, E extends keyof T> {
 		} else {
 			this.errorListener = callback;
 		}
+	}
+
+	/**
+	 * Waits for the given status code and returns the result.
+	 * @param status Status code to wait for
+	 */
+	await<K extends keyof T>(status: K & Exclude<K, E>): Promise<T[K]> {
+		return new Promise((resolve, reject) => {
+			this.on(status, resolve).catch(reject);
+		});
 	}
 
 	/**

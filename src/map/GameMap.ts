@@ -4,8 +4,7 @@ import {checkLineOfSight} from "../util/VoxelRayTrace";
 import {SafeMap} from "../util/SafeMap";
 
 export class GameMap {
-	private readonly name: string;
-	readonly id: number;
+	readonly id: string;
 	readonly width: number;
 	readonly height: number;
 	readonly tileTypes: TileType[];
@@ -18,8 +17,7 @@ export class GameMap {
 	readonly distanceMap: Int16Array;
 	readonly boatTargets: SafeMap<number, { tile: number, distance: number, path: number[] }[]> = new SafeMap(() => []);
 
-	constructor(name: string, id: number, width: number, height: number, tileTypes: TileTypeBase[]) {
-		this.name = name;
+	constructor(id: string, width: number, height: number, tileTypes: TileTypeBase[]) {
 		this.id = id;
 		this.width = width;
 		this.height = height;
