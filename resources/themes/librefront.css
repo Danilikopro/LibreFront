@@ -1,0 +1,90 @@
+@import "../base.css";
+
+/* LibreFront — red/black brand theme */
+:root {
+	--color-background: #0d0f12;
+	--panel-background: rgba(18, 20, 24, 0.94);
+	--panel-contrast: #272a30;
+
+	--color-dark: #050607;
+	--color-copy: #e6e6e8;
+	--color-light: #ffffff;
+
+	--color-gray-dark: #17191d;
+	--color-gray: #282b31;
+	--color-gray-medium: #555962;
+	--color-gray-light: #8e8e93;
+
+	--color-primary-dark: #8f1712;
+	--color-primary: #ff3b30;
+	--color-primary-medium: #ff6259;
+	--color-primary-light: #ff9b95;
+
+	--color-secondary-dark: #5f0f0c;
+	--color-secondary: #b82019;
+	--color-secondary-medium: #e22c24;
+	--color-secondary-light: #ff6a61;
+
+	--color-danger-dark: #650d0a;
+	--color-danger: #d9251d;
+	--color-danger-medium: #ff5148;
+	--color-danger-light: #ff8a84;
+
+	--color-success-dark: #174d35;
+	--color-success: #258052;
+	--color-success-medium: #41aa73;
+	--color-success-light: #82d3a4;
+}
+
+body {
+	background-color: var(--color-background);
+	color: var(--color-copy);
+}
+
+.theme-logo {
+	background-image: url(/resources/themes/librefront-logo.svg);
+	filter: drop-shadow(0 0 18px rgba(255, 59, 48, 0.28));
+}
+
+.theme-background {
+	background-color: #0d0f12;
+	background-image:
+		radial-gradient(circle at 50% 42%, rgba(255, 59, 48, 0.13), transparent 34%),
+		linear-gradient(135deg, rgba(255, 59, 48, 0.06) 0, transparent 35%, rgba(0, 0, 0, 0.72) 100%);
+}
+
+.panel {
+	border: 1px solid rgba(255, 59, 48, 0.55);
+	box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), 0 0 22px rgba(255, 59, 48, 0.08);
+}
+
+.panel-body {
+	border-color: var(--color-primary);
+	outline-color: var(--color-primary-dark);
+}
+
+.btn {
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	box-shadow: 0 0 0 1px rgba(255, 59, 48, 0.15), 0 5px 18px rgba(0, 0, 0, 0.35);
+}
+
+.btn-primary {
+	background: var(--color-primary-dark);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+	background: var(--color-primary);
+	color: #fff;
+}
+
+input.form-control {
+	background: #0d0f12;
+	color: var(--color-light);
+	border-bottom-color: var(--color-primary);
+}
+
+::-webkit-scrollbar-track { background: #111317; }
+::-webkit-scrollbar-thumb { background: #8f1712; }
+::-webkit-scrollbar-thumb:hover { background: #ff3b30; }

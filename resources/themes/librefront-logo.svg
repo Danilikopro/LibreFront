@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 150" width="100%" height="100%" role="img" aria-labelledby="title desc">
+  <title id="title">LibreFront</title>
+  <desc id="desc">Red shield and breakthrough arrow logo with LibreFront wordmark.</desc>
+  <rect width="720" height="150" fill="#0d0f12"/>
+  <g transform="translate(30,25)">
+    <path d="M0 0h70l30 50-30 50H0l30-50Z" fill="#FF3B30"/>
+    <path d="M15 20h40l20 30-20 30H15l20-30Z" fill="#0d0f12"/>
+    <path d="M30 38h20l12 12-12 12H30l12-12Z" fill="#FF3B30"/>
+    <g transform="translate(130,0)" font-family="Impact,Arial Black,sans-serif">
+      <text y="28" font-size="28" letter-spacing="10" fill="#8E8E93">LIBRE</text>
+      <text x="-2" y="96" font-size="76" letter-spacing="2" fill="#fff">FRONT</text>
+    </g>
+  </g>
+</svg>

@@ -1,13 +1,13 @@
 {
-  "name": "warfront-client",
+  "name": "librefront-client",
   "scripts": {
     "build-dev": "webpack --config webpack.config.js --mode development",
     "build-prod": "webpack --config webpack.config.js --mode production",
     "dev": "webpack serve --config webpack.config.js --mode development",
     "test": "tsx test/run.ts"
   },
-  "engines" : {
-    "node" : ">=20.0.0"
+  "engines": {
+    "node": ">=20.0.0"
   },
   "devDependencies": {
     "typescript": "^5.4.4",
