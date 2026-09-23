@@ -1,12 +1,12 @@
 <ignore>
-	<link rel="stylesheet" type="text/css" href="../../../../resources/themes/pastel.css">
+	<link rel="stylesheet" type="text/css" href="../../../../resources/themes/librefront.css">
 </ignore>
 
 <div id="GameHudContainer" class="layout-window background-vignette">
 	<div class="anchor-top-right flex-row grid-gap-m ui-passive p-1_2">
 		<span id="gameClock" class="hud-clock">00:00:00</span>
-		<button id="openSettings" class="btn btn-circle btn-primary icon-m icon-settings"></button>
-		<button id="exitGame" class="btn btn-circle btn-danger icon-m icon-quit"></button>
+		<button id="openSettings" class="btn btn-circle btn-primary icon-m icon-settings" aria-label="Open settings" title="Open settings"></button>
+		<button id="exitGame" class="btn btn-circle btn-danger icon-m icon-quit" aria-label="Leave game" title="Leave game"></button>
 	</div>
 
 	<div id="selectorContainer" class="anchor-bottom-center ui-passive selector-container">
@@ -14,7 +14,7 @@
 			<span id="selectorDensityNumber" class="selector-stat-success selector-stat">0</span>
 			<span id="selectorTroopCount" class="selector-stat">0</span>
 		</div>
-		<label id="sliderAttackStrength" class="selector-slider">
+		<label id="sliderAttackStrength" class="selector-slider" aria-label="Attack strength">
 			<span id="sliderAttackNumber" class="selector-number selector-number-reversed">50.0%</span>
 			<input id="sliderAttackHidden" type="range" min="0" max="100" step="any">
 		</label>
